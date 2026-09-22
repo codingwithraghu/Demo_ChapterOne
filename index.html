@@ -1,1163 +1,487 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.7">
-  <style type="text/css">
-    p.p1 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #6fe674;
-      -webkit-text-stroke: #6fe674;
-      background-color: #0f1010
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shelf Talker</title>
+  <style>
+    :root {
+      --paper: #f7f2e7;
+      --card-bg: #f7f0e2;
+      --ink: #222;
+      --muted: #5d5149;
+      --accent: #d97706;
+      --line: #d8cdb8;
+      --danger: #a43535;
     }
 
-    p.p2 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #8cd3fe;
-      -webkit-text-stroke: #8cd3fe;
-      background-color: #0f1010
+    * {
+      box-sizing: border-box;
     }
 
-    p.p3 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #96ccff;
-      -webkit-text-stroke: #96ccff;
-      background-color: #0f1010
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #efeae2;
+      color: var(--ink);
     }
 
-    p.p4 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #adb0b2;
-      -webkit-text-stroke: #adb0b2;
-      background-color: #0f1010
+    .controls {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 18px;
     }
 
-    p.p5 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #cacaca;
-      -webkit-text-stroke: #cacaca;
-      background-color: #0f1010
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(170px, 1fr));
+      gap: 14px;
+      align-items: end;
     }
 
-    p.p6 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px Times;
-      -webkit-text-stroke: #000000;
-      background-color: #0f1010;
-      min-height: 14.0px
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    p.p7 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #c27e65;
-      -webkit-text-stroke: #c27e65;
-      background-color: #0f1010
+    .field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    p.p8 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #cdad6a;
-      -webkit-text-stroke: #cdad6a;
-      background-color: #0f1010
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font: inherit;
+      background: rgba(255, 255, 255, 0.25);
+      color: var(--ink);
     }
 
-    p.p9 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #a7c598;
-      -webkit-text-stroke: #a7c598;
-      background-color: #0f1010
+    .field textarea {
+      min-height: 56px;
+      resize: vertical;
     }
 
-    p.p10 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #68b1ff;
-      -webkit-text-stroke: #68b1ff;
-      background-color: #0f1010
+    .field input:focus,
+    .field textarea:focus {
+      outline: 2px solid rgba(34, 34, 34, 0.15);
+      border-color: #b9ad99;
     }
 
-    p.p11 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #c692ff;
-      -webkit-text-stroke: #c692ff;
-      background-color: #0f1010
+    .field input.invalid,
+    .field textarea.invalid {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 1px rgba(164, 53, 53, 0.15);
     }
 
-    p.p12 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #bdc6d0;
-      -webkit-text-stroke: #bdc6d0;
-      background-color: #0f1010
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    p.p13 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #fd9546;
-      -webkit-text-stroke: #fd9546;
-      background-color: #0f1010
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
 
-    p.p14 {
-      margin: 0.0px 0.0px 0.0px 0.0px;
-      font: 12.0px 'Courier New';
-      color: #78818c;
-      -webkit-text-stroke: #78818c;
-      background-color: #0f1010
+    button:hover {
+      transform: translateY(-1px);
     }
 
-    span.s1 {
-      font-kerning: none;
-      color: #6d6d6d;
-      -webkit-text-stroke: 0px #6d6d6d
+    button:active {
+      transform: translateY(0);
     }
 
-    span.s2 {
-      font-kerning: none
+    .add-btn {
+      background: var(--ink);
+      color: #fff;
     }
 
-    span.s3 {
-      font-kerning: none;
-      color: #adb0b2;
-      -webkit-text-stroke: 0px #adb0b2
+    .print-btn {
+      background: #d8c5a1;
+      color: var(--ink);
     }
 
-    span.s4 {
-      font-kerning: none;
-      color: #8cd3fe;
-      -webkit-text-stroke: 0px #8cd3fe
+    .export-btn {
+      background: #a3c4bc;
+      color: var(--ink);
     }
 
-    span.s5 {
-      font-kerning: none;
-      color: #96ccff;
-      -webkit-text-stroke: 0px #96ccff
+    .cards-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
     }
 
-    span.s6 {
-      font-kerning: none;
-      color: #6fe674;
-      -webkit-text-stroke: 0px #6fe674
+    .shelf-card {
+      width: 10cm;
+      height: 5cm;
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      position: relative;
+      padding: 18px 18px 14px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
     }
 
-    span.s7 {
-      font-kerning: none;
-      color: #cdad6a;
-      -webkit-text-stroke: 0px #cdad6a
+    .shelf-card .meta {
+      font-size: 0.54rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    span.s8 {
-      font-kerning: none;
-      color: #c27e65;
-      -webkit-text-stroke: 0px #c27e65
+    .shelf-card .title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.9rem;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      overflow-wrap: anywhere;
     }
 
-    span.s9 {
-      font-kerning: none;
-      color: #cacaca;
-      -webkit-text-stroke: 0px #cacaca
+    .shelf-card .author {
+      margin: 6px 0 0;
+      font-size: 0.52rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      overflow-wrap: anywhere;
     }
 
-    span.s10 {
-      font-kerning: none;
-      color: #a7c598;
-      -webkit-text-stroke: 0px #a7c598
+    .shelf-card .reason {
+      margin: 8px 0 0;
+      /* leave room for the absolutely positioned picker line */
+      padding-bottom: 14px;
+      font-size: 0.4rem;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      overflow: hidden;
+      overflow-wrap: anywhere;
     }
 
-    span.s11 {
-      font-kerning: none;
-      color: #d4d69a;
-      -webkit-text-stroke: 0px #d4d69a
+    .shelf-card .picker {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      max-width: calc(100% - 28px);
+      font-size: 0.42rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-align: right;
+      overflow-wrap: anywhere;
     }
 
-    span.s12 {
-      font-kerning: none;
-      color: #b76fb3;
-      -webkit-text-stroke: 0px #b76fb3
+    .shelf-card .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      opacity: 0.5;
+      border-radius: 4px;
     }
 
-    span.s13 {
-      font-kerning: none;
-      color: #fc635f;
-      -webkit-text-stroke: 0px #fc635f
+    .shelf-card .delete-btn:hover {
+      opacity: 1;
+      transform: none;
     }
 
-    span.s14 {
-      font-kerning: none;
-      color: #c692ff;
-      -webkit-text-stroke: 0px #c692ff
+    .empty-state {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      color: var(--muted);
+      font-size: 0.85rem;
     }
 
-    span.s15 {
-      font-kerning: none;
-      color: #bdc6d0;
-      -webkit-text-stroke: 0px #bdc6d0
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .controls,
+      .empty-state {
+        display: none !important;
+      }
+
+      .cards-wrap {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4cm;
+      }
+
+      .shelf-card {
+        box-shadow: none;
+        margin: 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .shelf-card .delete-btn {
+        display: none;
+      }
     }
 
-    span.s16 {
-      font-kerning: none;
-      color: #68b1ff;
-      -webkit-text-stroke: 0px #68b1ff
-    }
-
-    span.s17 {
-      font-kerning: none;
-      color: #fd9546;
-      -webkit-text-stroke: 0px #fd9546
-    }
-
-    span.s18 {
-      font-kerning: none;
-      color: #43c0a0;
-      -webkit-text-stroke: 0px #43c0a0
-    }
-
-    span.s19 {
-      font-kerning: none;
-      color: #4689cc;
-      -webkit-text-stroke: 0px #4689cc
+    @page {
+      margin: 0.5cm;
     }
   </style>
 </head>
-
 <body>
-  <p class="p1"><span class="s1">&lt;!</span><span class="s2">DOCTYPE</span><span class="s3"> </span><span
-      class="s4">html</span><span class="s1">&gt;</span></p>
-  <p class="p1"><span class="s1">&lt;</span><span class="s2">html</span><span class="s3"> </span><span
-      class="s4">lang</span><span class="s3">=</span><span class="s5">"en"</span><span class="s1">&gt;</span></p>
-  <p class="p1"><span class="s3"> </span><span class="s1">&lt;</span><span class="s2">head</span><span
-      class="s1">&gt;</span></p>
-  <p class="p2"><span class="s3">   </span><span class="s1">&lt;</span><span class="s6">meta</span><span class="s3">
-    </span><span class="s2">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s3">
-    </span><span class="s1">/&gt;</span></p>
-  <p class="p3"><span class="s3">   </span><span class="s1">&lt;</span><span class="s6">meta</span><span class="s3">
-    </span><span class="s4">name</span><span class="s3">=</span><span class="s2">"viewport"</span><span class="s3">
-    </span><span class="s4">content</span><span class="s3">=</span><span class="s2">"width=device-width,
-      initial-scale=1.0"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-  <p class="p4"><span class="s2">   </span><span class="s1">&lt;</span><span class="s6">title</span><span
-      class="s1">&gt;</span><span class="s2">Shelf Talker</span><span class="s1">&lt;/</span><span
-      class="s6">title</span><span class="s1">&gt;</span></p>
-  <p class="p1"><span class="s3">   </span><span class="s1">&lt;</span><span class="s2">style</span><span
-      class="s1">&gt;</span></p>
-  <p class="p5"><span class="s2">     </span><span class="s7">:root</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--paper</span><span class="s2">: </span><span
-      class="s8">#f7f2e7</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--card-bg</span><span class="s2">: </span><span
-      class="s8">#f7f0e2</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--ink</span><span class="s2">: </span><span
-      class="s8">#222</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--muted</span><span class="s2">: </span><span
-      class="s8">#5d5149</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--accent</span><span class="s2">: </span><span
-      class="s8">#d97706</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--line</span><span class="s2">: </span><span
-      class="s8">#d8cdb8</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">--danger</span><span class="s2">: </span><span
-      class="s8">#a43535</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s6">*</span><span class="s2"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">box-sizing</span><span class="s9">: </span><span
-      class="s8">border-box</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s7">body</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p7"><span class="s9">       </span><span class="s4">font-family</span><span class="s9">: </span><span
-      class="s2">Arial</span><span class="s9">, </span><span class="s2">Helvetica</span><span class="s9">, </span><span
-      class="s2">sans-serif</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">background</span><span class="s9">: </span><span
-      class="s8">#efeae2</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.controls</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">max-width</span><span class="s2">: </span><span
-      class="s10">1200px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s8">auto</span><span class="s2">;</span></p>
-  <p class="p9"><span class="s9">       </span><span class="s4">padding</span><span class="s9">: </span><span
-      class="s2">24px</span><span class="s9"> </span><span class="s2">20px</span><span class="s9"> </span><span
-      class="s2">18px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.input-grid</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">grid</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">grid-template-columns</span><span class="s9">:
-    </span><span class="s11">repeat</span><span class="s9">(</span><span class="s10">4</span><span class="s9">,
-    </span><span class="s11">minmax</span><span class="s9">(</span><span class="s10">170px</span><span class="s9">,
-    </span><span class="s10">1fr</span><span class="s9">));</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">gap</span><span class="s2">: </span><span
-      class="s10">14px</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">align-items</span><span class="s9">: </span><span
-      class="s8">end</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s7">.field</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">flex</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">flex-direction</span><span class="s9">: </span><span
-      class="s8">column</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">gap</span><span class="s2">: </span><span
-      class="s10">6px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">label</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.72rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.08em</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">text-transform</span><span class="s9">: </span><span
-      class="s8">uppercase</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">color</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--muted</span><span class="s9">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">font-weight</span><span class="s9">: </span><span
-      class="s10">700</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">input</span><span class="s9">,</span></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">textarea</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">width</span><span class="s2">: </span><span
-      class="s10">100%</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">border</span><span class="s2">: </span><span
-      class="s10">1px</span><span class="s2"> </span><span class="s8">solid</span><span class="s2"> </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--line</span><span class="s2">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-radius</span><span class="s9">: </span><span
-      class="s10">6px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">padding</span><span class="s2">: </span><span
-      class="s10">10px</span><span class="s2"> </span><span class="s10">12px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font</span><span class="s2">: </span><span
-      class="s8">inherit</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">background</span><span class="s2">: </span><span
-      class="s11">rgba</span><span class="s2">(</span><span class="s10">255</span><span class="s2">, </span><span
-      class="s10">255</span><span class="s2">, </span><span class="s10">255</span><span class="s2">, </span><span
-      class="s10">0.25</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">textarea</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">min-height</span><span class="s9">: </span><span
-      class="s10">56px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">resize</span><span class="s2">: </span><span
-      class="s8">vertical</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">input:focus</span><span class="s9">,</span></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">textarea:focus</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">outline</span><span class="s2">: </span><span
-      class="s10">2px</span><span class="s2"> </span><span class="s8">solid</span><span class="s2"> </span><span
-      class="s11">rgba</span><span class="s2">(</span><span class="s10">34</span><span class="s2">, </span><span
-      class="s10">34</span><span class="s2">, </span><span class="s10">34</span><span class="s2">, </span><span
-      class="s10">0.15</span><span class="s2">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-color</span><span class="s9">: </span><span
-      class="s8">#b9ad99</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">input.invalid</span><span class="s9">,</span></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.field</span><span class="s9"> </span><span
-      class="s2">textarea.invalid</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-color</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--danger</span><span class="s9">);</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">box-shadow</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s10">0</span><span class="s2"> </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s10">1px</span><span class="s2"> </span><span
-      class="s11">rgba</span><span class="s2">(</span><span class="s10">164</span><span class="s2">, </span><span
-      class="s10">53</span><span class="s2">, </span><span class="s10">53</span><span class="s2">, </span><span
-      class="s10">0.15</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.top-actions</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">flex</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">justify-content</span><span class="s9">: </span><span
-      class="s8">flex-end</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">align-items</span><span class="s9">: </span><span
-      class="s8">center</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">margin-top</span><span class="s9">: </span><span
-      class="s10">18px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">gap</span><span class="s2">: </span><span
-      class="s10">12px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">flex-wrap</span><span class="s2">: </span><span
-      class="s8">wrap</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s7">button</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">border</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-radius</span><span class="s9">: </span><span
-      class="s10">999px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">padding</span><span class="s2">: </span><span
-      class="s10">10px</span><span class="s2"> </span><span class="s10">18px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font</span><span class="s2">: </span><span
-      class="s8">inherit</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">font-weight</span><span class="s9">: </span><span
-      class="s10">700</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.04em</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">cursor</span><span class="s2">: </span><span
-      class="s8">pointer</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">transition</span><span class="s2">: transform
-    </span><span class="s10">0.15s</span><span class="s2"> </span><span class="s8">ease</span><span class="s2">, opacity
-    </span><span class="s10">0.15s</span><span class="s2"> </span><span class="s8">ease</span><span class="s2">;</span>
-  </p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">button:hover</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">transform</span><span class="s2">: </span><span
-      class="s11">translateY</span><span class="s2">(</span><span class="s10">-1px</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">button:active</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">transform</span><span class="s2">: </span><span
-      class="s11">translateY</span><span class="s2">(</span><span class="s10">0</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.add-btn</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">background</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--ink</span><span class="s9">);</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s8">#fff</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.print-btn</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">background</span><span class="s9">: </span><span
-      class="s8">#d8c5a1</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.export-btn</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">background</span><span class="s9">: </span><span
-      class="s8">#a3c4bc</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.cards-wrap</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">max-width</span><span class="s2">: </span><span
-      class="s10">1200px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s8">auto</span><span class="s2">;</span></p>
-  <p class="p9"><span class="s9">       </span><span class="s4">padding</span><span class="s9">: </span><span
-      class="s2">10px</span><span class="s9"> </span><span class="s2">20px</span><span class="s9"> </span><span
-      class="s2">40px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">flex</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">flex-wrap</span><span class="s2">: </span><span
-      class="s8">wrap</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">gap</span><span class="s2">: </span><span
-      class="s10">22px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">width</span><span class="s2">: </span><span
-      class="s10">10cm</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">height</span><span class="s2">: </span><span
-      class="s10">5cm</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">background</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--card-bg</span><span class="s9">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border</span><span class="s9">: </span><span
-      class="s10">2px</span><span class="s9"> </span><span class="s8">solid</span><span class="s9"> </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--accent</span><span class="s9">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-radius</span><span class="s9">: </span><span
-      class="s10">14px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">position</span><span class="s2">: </span><span
-      class="s8">relative</span><span class="s2">;</span></p>
-  <p class="p9"><span class="s9">       </span><span class="s4">padding</span><span class="s9">: </span><span
-      class="s2">18px</span><span class="s9"> </span><span class="s2">18px</span><span class="s9"> </span><span
-      class="s2">14px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">box-shadow</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s10">1px</span><span class="s2"> </span><span
-      class="s10">0</span><span class="s2"> </span><span class="s11">rgba</span><span class="s2">(</span><span
-      class="s10">0</span><span class="s2">,</span><span class="s10">0</span><span class="s2">,</span><span
-      class="s10">0</span><span class="s2">,</span><span class="s10">0.08</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">flex</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">flex-direction</span><span class="s9">: </span><span
-      class="s8">column</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">justify-content</span><span class="s9">: </span><span
-      class="s8">space-between</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.meta</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.54rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.18em</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">text-transform</span><span class="s9">: </span><span
-      class="s8">uppercase</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">color</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--muted</span><span class="s9">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">font-weight</span><span class="s9">: </span><span
-      class="s10">700</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.title</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p3"><span class="s9">       </span><span class="s4">font-family</span><span class="s9">: </span><span
-      class="s8">Georgia</span><span class="s9">, </span><span class="s2">"Times New Roman"</span><span class="s9">,
-    </span><span class="s8">serif</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.9rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">line-height</span><span class="s9">: </span><span
-      class="s10">1.2</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">font-weight</span><span class="s9">: </span><span
-      class="s10">700</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.01em</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.author</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">6px</span><span class="s2"> </span><span class="s10">0</span><span class="s2"> </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.52rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.08em</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">text-transform</span><span class="s9">: </span><span
-      class="s8">uppercase</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">color</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--muted</span><span class="s9">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.reason</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">8px</span><span class="s2"> </span><span class="s10">0</span><span class="s2"> </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.4rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">line-height</span><span class="s9">: </span><span
-      class="s10">1.5</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.04em</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.picker</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">position</span><span class="s2">: </span><span
-      class="s8">absolute</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">right</span><span class="s2">: </span><span
-      class="s10">14px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">bottom</span><span class="s2">: </span><span
-      class="s10">12px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">0.42rem</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">letter-spacing</span><span class="s9">: </span><span
-      class="s10">0.08em</span><span class="s9">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">text-transform</span><span class="s9">: </span><span
-      class="s8">uppercase</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">color</span><span class="s2">: </span><span
-      class="s11">var</span><span class="s2">(</span><span class="s4">--ink</span><span class="s2">);</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">text-align</span><span class="s9">: </span><span
-      class="s8">right</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.delete-btn</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">position</span><span class="s2">: </span><span
-      class="s8">absolute</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">top</span><span class="s2">: </span><span
-      class="s10">8px</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">right</span><span class="s2">: </span><span
-      class="s10">8px</span><span class="s2">;</span></p>
-  <p class="p7"><span class="s9">       </span><span class="s4">background</span><span class="s9">: </span><span
-      class="s2">transparent</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">border</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">color</span><span class="s9">: </span><span
-      class="s11">var</span><span class="s9">(</span><span class="s2">--danger</span><span class="s9">);</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">font-size</span><span class="s2">: </span><span
-      class="s10">1.2rem</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">cursor</span><span class="s2">: </span><span
-      class="s8">pointer</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">padding</span><span class="s2">: </span><span
-      class="s10">4px</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">line-height</span><span class="s9">: </span><span
-      class="s10">1</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">opacity</span><span class="s2">: </span><span
-      class="s10">0.5</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">border-radius</span><span class="s9">: </span><span
-      class="s10">4px</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.delete-btn:hover</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">opacity</span><span class="s2">: </span><span
-      class="s10">1</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">transform</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s12">@media</span><span class="s2"> </span><span
-      class="s8">print</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s7">body</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">background</span><span class="s2">: </span><span
-      class="s8">#fff</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">       </span><span class="s2">.controls</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2"> </span><span class="s13">!important</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">       }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">       </span><span class="s2">.cards-wrap</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">max-width</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">padding</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">flex</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">flex-wrap</span><span class="s2">: </span><span
-      class="s8">wrap</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">         </span><span class="s4">gap</span><span class="s2">: </span><span
-      class="s10">0.4cm</span><span class="s2">;</span></p>
-  <p class="p2"><span class="s9">         </span><span class="s2">page-break-inside</span><span class="s9">:
-    </span><span class="s8">avoid</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">       </span><span class="s2">.shelf-card</span><span class="s9"> {</span></p>
-  <p class="p2"><span class="s9">       </span><span class="s2">box-shadow</span><span class="s9">: </span><span
-      class="s8">none</span><span class="s9">;</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p8"><span class="s9">     </span><span class="s2">.shelf-card</span><span class="s9"> </span><span
-      class="s2">.delete-btn</span><span class="s9"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">display</span><span class="s2">: </span><span
-      class="s8">none</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p5"><span class="s2">   }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s12">@page</span><span class="s2"> {</span></p>
-  <p class="p5"><span class="s2">       </span><span class="s4">margin</span><span class="s2">: </span><span
-      class="s10">0.5cm</span><span class="s2">;</span></p>
-  <p class="p5"><span class="s2">     }</span></p>
-  <p class="p1"><span class="s9">   </span><span class="s1">&lt;/</span><span class="s2">style</span><span
-      class="s1">&gt;</span></p>
-  <p class="p1"><span class="s3"> </span><span class="s1">&lt;/</span><span class="s2">head</span><span
-      class="s1">&gt;</span></p>
-  <p class="p1"><span class="s3"> </span><span class="s1">&lt;</span><span class="s2">body</span><span
-      class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">   </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3">
-    </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"controls"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">     </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3">
-    </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"input-grid"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2">
-    </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"field"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">         </span><span class="s1">&lt;</span><span class="s6">label</span><span
-      class="s2"> </span><span class="s4">for</span><span class="s2">=</span><span class="s5">"title"</span><span
-      class="s1">&gt;</span><span class="s2">Book title</span><span class="s1">&lt;/</span><span
-      class="s6">label</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">         </span><span class="s1">&lt;</span><span class="s6">input</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"title"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"text"</span><span
-      class="s3"> </span><span class="s4">placeholder</span><span class="s3">=</span><span class="s2">"Enter
-      title"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2">
-    </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"field"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">         </span><span class="s1">&lt;</span><span class="s6">label</span><span
-      class="s2"> </span><span class="s4">for</span><span class="s2">=</span><span class="s5">"author"</span><span
-      class="s1">&gt;</span><span class="s2">Author</span><span class="s1">&lt;/</span><span
-      class="s6">label</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">         </span><span class="s1">&lt;</span><span class="s6">input</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"author"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"text"</span><span
-      class="s3"> </span><span class="s4">placeholder</span><span class="s3">=</span><span class="s2">"Enter
-      author"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2">
-    </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"field"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">         </span><span class="s1">&lt;</span><span class="s6">label</span><span
-      class="s2"> </span><span class="s4">for</span><span class="s2">=</span><span class="s5">"why"</span><span
-      class="s1">&gt;</span><span class="s2">Why we like it</span><span class="s1">&lt;/</span><span
-      class="s6">label</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">         </span><span class="s1">&lt;</span><span class="s6">textarea</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"why"</span><span
-      class="s3"> </span><span class="s4">placeholder</span><span class="s3">=</span><span class="s2">"One line on why
-      we like it"</span><span class="s1">&gt;&lt;/</span><span class="s6">textarea</span><span class="s1">&gt;</span>
-  </p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s2">
-    </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"field"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">         </span><span class="s1">&lt;</span><span class="s6">label</span><span
-      class="s2"> </span><span class="s4">for</span><span class="s2">=</span><span class="s5">"picker"</span><span
-      class="s1">&gt;</span><span class="s2">Whose pick it is</span><span class="s1">&lt;/</span><span
-      class="s6">label</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">         </span><span class="s1">&lt;</span><span class="s6">input</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"picker"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"text"</span><span
-      class="s3"> </span><span class="s4">placeholder</span><span class="s3">=</span><span class="s2">"Picker's
-      name"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-  <p class="p4"><span class="s2">       </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">     </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p3"><span class="s3">     </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3">
-    </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"top-actions"</span><span
-      class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">       </span><span class="s1">&lt;</span><span class="s6">button</span><span
-      class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"add-btn"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"button"</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"addCard"</span><span
-      class="s1">&gt;</span><span class="s3">Add card</span><span class="s1">&lt;/</span><span
-      class="s6">button</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">       </span><span class="s1">&lt;</span><span class="s6">button</span><span
-      class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"print-btn"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"button"</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"printCards"</span><span
-      class="s1">&gt;</span><span class="s3">Print these</span><span class="s1">&lt;/</span><span
-      class="s6">button</span><span class="s1">&gt;</span></p>
-  <p class="p3"><span class="s3">       </span><span class="s1">&lt;</span><span class="s6">button</span><span
-      class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"export-btn"</span><span
-      class="s3"> </span><span class="s4">type</span><span class="s3">=</span><span class="s2">"button"</span><span
-      class="s3"> </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"exportCards"</span><span
-      class="s1">&gt;</span><span class="s3">Export to Excel</span><span class="s1">&lt;/</span><span
-      class="s6">button</span><span class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">     </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p4"><span class="s2">   </span><span class="s1">&lt;/</span><span class="s6">div</span><span
-      class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p3"><span class="s3">   </span><span class="s1">&lt;</span><span class="s6">div</span><span class="s3">
-    </span><span class="s4">id</span><span class="s3">=</span><span class="s2">"cards"</span><span class="s3">
-    </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"cards-wrap"</span><span class="s3">
-    </span><span class="s4">aria-live</span><span class="s3">=</span><span class="s2">"polite"</span><span
-      class="s1">&gt;&lt;/</span><span class="s6">div</span><span class="s1">&gt;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p1"><span class="s3">   </span><span class="s1">&lt;</span><span class="s2">script</span><span
-      class="s1">&gt;</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">titleInput</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'title'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">authorInput</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'author'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">whyInput</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'why'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">pickerInput</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'picker'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">cardsContainer</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'cards'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">addCardBtn</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'addCard'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">printCardsBtn</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'printCards'</span><span class="s9">);</span></p>
-  <p class="p10"><span class="s9">     </span><span class="s13">const</span><span class="s9"> </span><span
-      class="s2">exportCardsBtn</span><span class="s9"> = </span><span class="s2">document</span><span
-      class="s9">.</span><span class="s14">getElementById</span><span class="s9">(</span><span
-      class="s5">'exportCards'</span><span class="s9">);</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s13">let</span><span class="s2"> </span><span
-      class="s15">cardsData</span><span class="s2"> = </span><span class="s16">JSON</span><span class="s2">.</span><span
-      class="s14">parse</span><span class="s2">(</span><span class="s16">localStorage</span><span
-      class="s2">.</span><span class="s14">getItem</span><span class="s2">(</span><span
-      class="s5">'shelfCards'</span><span class="s2">)) || [];</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s2">saveCards</span><span class="s9">() </span><span class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">localStorage</span><span class="s2">.</span><span
-      class="s14">setItem</span><span class="s2">(</span><span class="s5">'shelfCards'</span><span class="s2">,
-    </span><span class="s16">JSON</span><span class="s2">.</span><span class="s14">stringify</span><span
-      class="s2">(cardsData));</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s2">renderCards</span><span class="s9">() </span><span class="s15">{</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">cardsContainer</span><span class="s15">.</span><span
-      class="s2">innerHTML</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">''</span><span class="s15">;</span></p>
-  <p class="p12"><span class="s2">       cardsData.</span><span class="s14">forEach</span><span class="s2">(</span><span
-      class="s17">data</span><span class="s2"> </span><span class="s13">=&gt;</span><span class="s2"> {</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s16">cardsContainer</span><span class="s2">.</span><span
-      class="s14">appendChild</span><span class="s2">(</span><span class="s14">createCard</span><span
-      class="s2">(</span><span class="s17">data</span><span class="s2">.id, </span><span class="s17">data</span><span
-      class="s2">.title, </span><span class="s17">data</span><span class="s2">.author, </span><span
-      class="s17">data</span><span class="s2">.why, </span><span class="s17">data</span><span
-      class="s2">.picker));</span></p>
-  <p class="p12"><span class="s2">       });</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s2">deleteCard</span><span class="s9">(</span><span class="s17">id</span><span class="s9">) </span><span
-      class="s15">{</span></p>
-  <p class="p12"><span class="s2">       cardsData </span><span class="s9">=</span><span class="s2">
-      cardsData.</span><span class="s14">filter</span><span class="s2">(</span><span class="s17">card</span><span
-      class="s2"> </span><span class="s13">=&gt;</span><span class="s2"> </span><span class="s17">card</span><span
-      class="s2">.id </span><span class="s9">!==</span><span class="s2"> </span><span class="s17">id</span><span
-      class="s2">);</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s14">saveCards</span><span class="s2">();</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s2">renderCards</span><span class="s15">();</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s2">markInvalid</span><span class="s9">() </span><span class="s15">{</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">titleInput</span><span class="s15">.</span><span
-      class="s2">classList</span><span class="s15">.</span><span class="s14">add</span><span class="s15">(</span><span
-      class="s5">'invalid'</span><span class="s15">);</span></p>
-  <p class="p3"><span class="s15">       </span><span class="s16">titleInput</span><span class="s15">.</span><span
-      class="s14">setAttribute</span><span class="s15">(</span><span class="s2">'aria-invalid'</span><span class="s15">,
-    </span><span class="s2">'true'</span><span class="s15">);</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s2">clearInvalid</span><span class="s9">() </span><span class="s15">{</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">titleInput</span><span class="s15">.</span><span
-      class="s2">classList</span><span class="s15">.</span><span class="s14">remove</span><span
-      class="s15">(</span><span class="s5">'invalid'</span><span class="s15">);</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s16">titleInput</span><span class="s15">.</span><span
-      class="s2">removeAttribute</span><span class="s15">(</span><span class="s5">'aria-invalid'</span><span
-      class="s15">);</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p13"><span class="s9">     </span><span class="s13">function</span><span class="s9"> </span><span
-      class="s14">createCard</span><span class="s9">(</span><span class="s2">id</span><span class="s9">, </span><span
-      class="s2">title</span><span class="s9">, </span><span class="s2">author</span><span class="s9">, </span><span
-      class="s2">why</span><span class="s9">, </span><span class="s2">picker</span><span class="s9">) </span><span
-      class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">card</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">document</span><span class="s2">.</span><span class="s14">createElement</span><span
-      class="s2">(</span><span class="s5">'article'</span><span class="s2">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">card</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'shelf-card'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">badge</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">document</span><span class="s2">.</span><span class="s14">createElement</span><span
-      class="s2">(</span><span class="s5">'div'</span><span class="s2">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">badge</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'meta'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">badge</span><span class="s15">.</span><span
-      class="s2">textContent</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'Staff Pick'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p10"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s2">titleEl</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s2">document</span><span class="s15">.</span><span class="s14">createElement</span><span
-      class="s15">(</span><span class="s5">'h2'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">titleEl</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'title'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">titleEl</span><span class="s15">.</span><span
-      class="s2">textContent</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s17">title</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p10"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s2">authorEl</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s2">document</span><span class="s15">.</span><span class="s14">createElement</span><span
-      class="s15">(</span><span class="s5">'div'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">authorEl</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'author'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">authorEl</span><span class="s15">.</span><span
-      class="s2">textContent</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s17">author</span><span class="s15"> </span><span class="s9">||</span><span class="s15"> </span><span
-      class="s5">'Author unknown'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p10"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s2">reasonEl</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s2">document</span><span class="s15">.</span><span class="s14">createElement</span><span
-      class="s15">(</span><span class="s5">'div'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">reasonEl</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'reason'</span><span class="s15">;</span></p>
-  <p class="p3"><span class="s15">       </span><span class="s16">reasonEl</span><span class="s15">.</span><span
-      class="s16">textContent</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s17">why</span><span class="s15"> </span><span class="s9">||</span><span class="s15"> </span><span
-      class="s2">'A favorite for thoughtful readers.'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p10"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s2">pickerEl</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s2">document</span><span class="s15">.</span><span class="s14">createElement</span><span
-      class="s15">(</span><span class="s5">'div'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">pickerEl</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'picker'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">pickerEl</span><span class="s15">.</span><span
-      class="s2">textContent</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s17">picker</span><span class="s15"> </span><span class="s9">||</span><span class="s15"> </span><span
-      class="s5">'Staff'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p10"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s2">deleteBtn</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s2">document</span><span class="s15">.</span><span class="s14">createElement</span><span
-      class="s15">(</span><span class="s5">'button'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">deleteBtn</span><span class="s15">.</span><span
-      class="s2">className</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'delete-btn'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">deleteBtn</span><span class="s15">.</span><span
-      class="s2">innerHTML</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'&amp;times;'</span><span class="s15">;</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s16">deleteBtn</span><span class="s15">.</span><span
-      class="s2">onclick</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> () </span><span
-      class="s13">=&gt;</span><span class="s15"> </span><span class="s2">deleteCard</span><span
-      class="s15">(</span><span class="s17">id</span><span class="s15">);</span></p>
-  <p class="p3"><span class="s15">       </span><span class="s16">deleteBtn</span><span class="s15">.</span><span
-      class="s14">setAttribute</span><span class="s15">(</span><span class="s2">'aria-label'</span><span class="s15">,
-    </span><span class="s2">'Delete card'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">deleteBtn</span><span class="s15">.</span><span
-      class="s2">title</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s5">'Delete card'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s15">       </span><span class="s16">card</span><span class="s15">.</span><span
-      class="s2">appendChild</span><span class="s15">(</span><span class="s16">badge</span><span class="s15">);</span>
-  </p>
-  <p class="p11"><span class="s15">       </span><span class="s16">card</span><span class="s15">.</span><span
-      class="s2">appendChild</span><span class="s15">(</span><span class="s16">titleEl</span><span class="s15">);</span>
-  </p>
-  <p class="p10"><span class="s15">       </span><span class="s2">card</span><span class="s15">.</span><span
-      class="s14">appendChild</span><span class="s15">(</span><span class="s2">authorEl</span><span
-      class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">card</span><span class="s15">.</span><span
-      class="s14">appendChild</span><span class="s15">(</span><span class="s2">reasonEl</span><span
-      class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">card</span><span class="s15">.</span><span
-      class="s14">appendChild</span><span class="s15">(</span><span class="s2">pickerEl</span><span
-      class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">card</span><span class="s15">.</span><span
-      class="s14">appendChild</span><span class="s15">(</span><span class="s2">deleteBtn</span><span
-      class="s15">);</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s12">return</span><span class="s2"> </span><span
-      class="s16">card</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p5"><span class="s2">     </span><span class="s13">function</span><span class="s2"> </span><span
-      class="s14">addCard</span><span class="s2">() </span><span class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">title</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">titleInput</span><span class="s2">.value.</span><span class="s14">trim</span><span
-      class="s2">();</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s12">if</span><span class="s2"> (</span><span
-      class="s9">!</span><span class="s16">title</span><span class="s2">) {</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s14">markInvalid</span><span class="s2">();</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s16">titleInput</span><span class="s2">.</span><span
-      class="s14">focus</span><span class="s2">();</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s12">return</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s15">       </span><span class="s2">clearInvalid</span><span class="s15">();</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">author</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">authorInput</span><span class="s2">.value.</span><span class="s14">trim</span><span
-      class="s2">();</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">why</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">whyInput</span><span class="s2">.value.</span><span class="s14">trim</span><span class="s2">();</span>
-  </p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">picker</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">pickerInput</span><span class="s2">.value.</span><span class="s14">trim</span><span
-      class="s2">();</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s16">id</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s18">Date</span><span class="s15">.</span><span class="s2">now</span><span class="s15">().</span><span
-      class="s2">toString</span><span class="s15">() </span><span class="s9">+</span><span class="s15"> </span><span
-      class="s16">Math</span><span class="s15">.</span><span class="s2">random</span><span class="s15">().</span><span
-      class="s2">toString</span><span class="s15">(</span><span class="s10">36</span><span class="s15">).</span><span
-      class="s2">substr</span><span class="s15">(</span><span class="s10">2</span><span class="s15">, </span><span
-      class="s10">5</span><span class="s15">);</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">newCard</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> { id, title, author,
-      why, picker };</span></p>
-  <p class="p12"><span class="s2">       cardsData.</span><span class="s14">push</span><span class="s2">(</span><span
-      class="s16">newCard</span><span class="s2">);</span></p>
-  <p class="p12"><span class="s2">      </span></p>
-  <p class="p12"><span class="s2">       </span><span class="s14">saveCards</span><span class="s2">();</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s2">renderCards</span><span class="s15">();</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">titleInput</span><span class="s2">.value </span><span
-      class="s9">=</span><span class="s2"> </span><span class="s5">''</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">authorInput</span><span class="s2">.value </span><span
-      class="s9">=</span><span class="s2"> </span><span class="s5">''</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">whyInput</span><span class="s2">.value </span><span
-      class="s9">=</span><span class="s2"> </span><span class="s5">''</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">pickerInput</span><span class="s2">.value </span><span
-      class="s9">=</span><span class="s2"> </span><span class="s5">''</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">titleInput</span><span class="s2">.</span><span
-      class="s14">focus</span><span class="s2">();</span></p>
-  <p class="p12"><span class="s2">     }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s16">addCardBtn</span><span class="s9">.</span><span
-      class="s2">addEventListener</span><span class="s9">(</span><span class="s5">'click'</span><span class="s9">,
-    </span><span class="s2">addCard</span><span class="s9">);</span></p>
-  <p class="p11"><span class="s9">     </span><span class="s16">printCardsBtn</span><span class="s9">.</span><span
-      class="s2">addEventListener</span><span class="s9">(</span><span class="s5">'click'</span><span class="s9">,
-    </span><span class="s13">function</span><span class="s9"> () </span><span class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">window</span><span class="s2">.</span><span
-      class="s14">print</span><span class="s2">();</span></p>
-  <p class="p12"><span class="s2">     }</span><span class="s9">);</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s16">exportCardsBtn</span><span class="s9">.</span><span
-      class="s2">addEventListener</span><span class="s9">(</span><span class="s5">'click'</span><span class="s9">,
-    </span><span class="s13">function</span><span class="s9"> () </span><span class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s12">if</span><span class="s2"> (cardsData.</span><span
-      class="s16">length</span><span class="s2"> </span><span class="s9">===</span><span class="s2"> </span><span
-      class="s10">0</span><span class="s2">) {</span></p>
-  <p class="p3"><span class="s15">         </span><span class="s11">alert</span><span class="s15">(</span><span
-      class="s2">'No cards to export.'</span><span class="s15">);</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s12">return</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       }</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p3"><span class="s15">       </span><span class="s13">let</span><span class="s15"> csvContent </span><span
-      class="s9">=</span><span class="s15"> </span><span class="s2">'Title,Author,Why we like it,Picker</span><span
-      class="s7">\n</span><span class="s2">'</span><span class="s15">;</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s14">escapeCSV</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> (</span><span
-      class="s17">str</span><span class="s2">) </span><span class="s13">=&gt;</span><span class="s2"> {</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s12">if</span><span class="s2"> (</span><span
-      class="s9">!</span><span class="s17">str</span><span class="s2">) </span><span class="s12">return</span><span
-      class="s2"> </span><span class="s5">'""'</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s12">return</span><span class="s2"> </span><span
-      class="s5">'"'</span><span class="s2"> </span><span class="s9">+</span><span class="s2"> </span><span
-      class="s17">str</span><span class="s2">.</span><span class="s14">replace</span><span class="s2">(</span><span
-      class="s5">/"/</span><span class="s13">g</span><span class="s2">, </span><span class="s5">'""'</span><span
-      class="s2">) </span><span class="s9">+</span><span class="s2"> </span><span class="s5">'"'</span><span
-      class="s2">;</span></p>
-  <p class="p12"><span class="s2">       };</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       cardsData.</span><span class="s14">forEach</span><span class="s2">(</span><span
-      class="s17">card</span><span class="s2"> </span><span class="s13">=&gt;</span><span class="s2"> {</span></p>
-  <p class="p12"><span class="s2">         </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">row</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> [</span></p>
-  <p class="p12"><span class="s2">           </span><span class="s14">escapeCSV</span><span class="s2">(</span><span
-      class="s17">card</span><span class="s2">.title),</span></p>
-  <p class="p12"><span class="s2">           </span><span class="s14">escapeCSV</span><span class="s2">(</span><span
-      class="s17">card</span><span class="s2">.author),</span></p>
-  <p class="p12"><span class="s2">           </span><span class="s14">escapeCSV</span><span class="s2">(</span><span
-      class="s17">card</span><span class="s2">.why),</span></p>
-  <p class="p12"><span class="s2">           </span><span class="s14">escapeCSV</span><span class="s2">(</span><span
-      class="s17">card</span><span class="s2">.picker)</span></p>
-  <p class="p12"><span class="s2">         ].</span><span class="s14">join</span><span class="s2">(</span><span
-      class="s5">','</span><span class="s2">);</span></p>
-  <p class="p12"><span class="s2">         csvContent </span><span class="s9">+=</span><span class="s2"> </span><span
-      class="s16">row</span><span class="s2"> </span><span class="s9">+</span><span class="s2"> </span><span
-      class="s5">'</span><span class="s7">\n</span><span class="s5">'</span><span class="s2">;</span></p>
-  <p class="p12"><span class="s2">       });</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">blob</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s19">new</span><span class="s2"> </span><span class="s18">Blob</span><span class="s2">([csvContent], {
-      type</span><span class="s4">:</span><span class="s2"> </span><span
-      class="s5">'text/csv;charset=utf-8;'</span><span class="s2"> });</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s13">const</span><span class="s15"> </span><span
-      class="s16">url</span><span class="s15"> </span><span class="s9">=</span><span class="s15"> </span><span
-      class="s18">URL</span><span class="s15">.</span><span class="s2">createObjectURL</span><span
-      class="s15">(</span><span class="s16">blob</span><span class="s15">);</span></p>
-  <p class="p12"><span class="s2">      </span></p>
-  <p class="p12"><span class="s2">       </span><span class="s13">const</span><span class="s2"> </span><span
-      class="s16">link</span><span class="s2"> </span><span class="s9">=</span><span class="s2"> </span><span
-      class="s16">document</span><span class="s2">.</span><span class="s14">createElement</span><span
-      class="s2">(</span><span class="s5">'a'</span><span class="s2">);</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">link</span><span class="s2">.</span><span
-      class="s14">setAttribute</span><span class="s2">(</span><span class="s5">'href'</span><span class="s2">,
-    </span><span class="s16">url</span><span class="s2">);</span></p>
-  <p class="p3"><span class="s15">       </span><span class="s16">link</span><span class="s15">.</span><span
-      class="s14">setAttribute</span><span class="s15">(</span><span class="s2">'download'</span><span class="s15">,
-    </span><span class="s2">'shelf_talkers.csv'</span><span class="s15">);</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">link</span><span class="s15">.</span><span
-      class="s2">style</span><span class="s15">.</span><span class="s2">visibility</span><span class="s15"> </span><span
-      class="s9">=</span><span class="s15"> </span><span class="s5">'hidden'</span><span class="s15">;</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">document</span><span class="s15">.</span><span
-      class="s2">body</span><span class="s15">.</span><span class="s14">appendChild</span><span
-      class="s15">(</span><span class="s2">link</span><span class="s15">);</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s16">link</span><span class="s2">.</span><span
-      class="s14">click</span><span class="s2">();</span></p>
-  <p class="p10"><span class="s15">       </span><span class="s2">document</span><span class="s15">.</span><span
-      class="s2">body</span><span class="s15">.</span><span class="s14">removeChild</span><span
-      class="s15">(</span><span class="s2">link</span><span class="s15">);</span></p>
-  <p class="p11"><span class="s15">       </span><span class="s18">URL</span><span class="s15">.</span><span
-      class="s2">revokeObjectURL</span><span class="s15">(</span><span class="s16">url</span><span class="s15">);</span>
-  </p>
-  <p class="p12"><span class="s2">     }</span><span class="s9">);</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p11"><span class="s9">     </span><span class="s16">titleInput</span><span class="s9">.</span><span
-      class="s2">addEventListener</span><span class="s9">(</span><span class="s5">'input'</span><span class="s9">,
-    </span><span class="s13">function</span><span class="s9"> () </span><span class="s15">{</span></p>
-  <p class="p12"><span class="s2">       </span><span class="s12">if</span><span class="s2"> (</span><span
-      class="s16">titleInput</span><span class="s2">.value.</span><span class="s14">trim</span><span class="s2">())
-      {</span></p>
-  <p class="p11"><span class="s15">         </span><span class="s2">clearInvalid</span><span class="s15">();</span></p>
-  <p class="p12"><span class="s2">       }</span></p>
-  <p class="p12"><span class="s2">     }</span><span class="s9">);</span></p>
-  <p class="p6"><span class="s2"></span><br></p>
-  <p class="p14"><span class="s9">     </span><span class="s2">// Initial render</span></p>
-  <p class="p11"><span class="s9">     </span><span class="s2">renderCards</span><span class="s9">();</span></p>
-  <p class="p1"><span class="s9">   </span><span class="s1">&lt;/</span><span class="s2">script</span><span
-      class="s1">&gt;</span></p>
-  <p class="p1"><span class="s3"> </span><span class="s1">&lt;/</span><span class="s2">body</span><span
-      class="s1">&gt;</span></p>
-  <p class="p1"><span class="s1">&lt;/</span><span class="s2">html</span><span class="s1">&gt;</span></p>
-</body>
+  <div class="controls">
+    <div class="input-grid">
+      <div class="field">
+        <label for="title">Book title</label>
+        <input id="title" type="text" placeholder="Enter title" />
+      </div>
 
+      <div class="field">
+        <label for="author">Author</label>
+        <input id="author" type="text" placeholder="Enter author" />
+      </div>
+
+      <div class="field">
+        <label for="why">Why we like it</label>
+        <textarea id="why" placeholder="One line on why we like it"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="picker">Whose pick it is</label>
+        <input id="picker" type="text" placeholder="Picker's name" />
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="add-btn" type="button" id="addCard">Add card</button>
+      <button class="print-btn" type="button" id="printCards">Print these</button>
+      <button class="export-btn" type="button" id="exportCards">Export to Excel</button>
+    </div>
+  </div>
+
+  <div id="cards" class="cards-wrap" aria-live="polite"></div>
+  <p id="emptyState" class="empty-state" hidden>No cards yet. Add one above.</p>
+
+  <script>
+    const titleInput = document.getElementById('title');
+    const authorInput = document.getElementById('author');
+    const whyInput = document.getElementById('why');
+    const pickerInput = document.getElementById('picker');
+    const cardsContainer = document.getElementById('cards');
+    const emptyState = document.getElementById('emptyState');
+    const addCardBtn = document.getElementById('addCard');
+    const printCardsBtn = document.getElementById('printCards');
+    const exportCardsBtn = document.getElementById('exportCards');
+
+    const STORAGE_KEY = 'shelfCards';
+
+    // Bad or unreadable storage must not take the whole page down.
+    function loadCards() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return Array.isArray(stored) ? stored : [];
+      } catch (err) {
+        console.warn('Could not read saved cards; starting empty.', err);
+        return [];
+      }
+    }
+
+    let cardsData = loadCards();
+
+    function saveCards() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cardsData));
+      } catch (err) {
+        console.warn('Could not save cards.', err);
+      }
+    }
+
+    function renderCards() {
+      cardsContainer.innerHTML = '';
+      cardsData.forEach(data => {
+        cardsContainer.appendChild(createCard(data.id, data.title, data.author, data.why, data.picker));
+      });
+      emptyState.hidden = cardsData.length > 0;
+    }
+
+    function deleteCard(id) {
+      cardsData = cardsData.filter(card => card.id !== id);
+      saveCards();
+      renderCards();
+    }
+
+    function markInvalid() {
+      titleInput.classList.add('invalid');
+      titleInput.setAttribute('aria-invalid', 'true');
+    }
+
+    function clearInvalid() {
+      titleInput.classList.remove('invalid');
+      titleInput.removeAttribute('aria-invalid');
+    }
+
+    function createCard(id, title, author, why, picker) {
+      const card = document.createElement('article');
+      card.className = 'shelf-card';
+
+      const badge = document.createElement('div');
+      badge.className = 'meta';
+      badge.textContent = 'Staff Pick';
+
+      const titleEl = document.createElement('h2');
+      titleEl.className = 'title';
+      titleEl.textContent = title;
+
+      const authorEl = document.createElement('div');
+      authorEl.className = 'author';
+      authorEl.textContent = author || 'Author unknown';
+
+      const reasonEl = document.createElement('div');
+      reasonEl.className = 'reason';
+      reasonEl.textContent = why || 'A favorite for thoughtful readers.';
+
+      const pickerEl = document.createElement('div');
+      pickerEl.className = 'picker';
+      pickerEl.textContent = picker || 'Staff';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.type = 'button';
+      deleteBtn.innerHTML = '&times;';
+      deleteBtn.onclick = () => deleteCard(id);
+      deleteBtn.setAttribute('aria-label', 'Delete card');
+      deleteBtn.title = 'Delete card';
+
+      card.appendChild(badge);
+      card.appendChild(titleEl);
+      card.appendChild(authorEl);
+      card.appendChild(reasonEl);
+      card.appendChild(pickerEl);
+      card.appendChild(deleteBtn);
+
+      return card;
+    }
+
+    function addCard() {
+      const title = titleInput.value.trim();
+
+      if (!title) {
+        markInvalid();
+        titleInput.focus();
+        return;
+      }
+
+      clearInvalid();
+
+      const author = authorInput.value.trim();
+      const why = whyInput.value.trim();
+      const picker = pickerInput.value.trim();
+
+      const id = Date.now().toString() + Math.random().toString(36).slice(2, 7);
+      cardsData.push({ id, title, author, why, picker });
+
+      saveCards();
+      renderCards();
+
+      titleInput.value = '';
+      authorInput.value = '';
+      whyInput.value = '';
+      pickerInput.value = '';
+      titleInput.focus();
+    }
+
+    addCardBtn.addEventListener('click', addCard);
+
+    printCardsBtn.addEventListener('click', function () {
+      window.print();
+    });
+
+    exportCardsBtn.addEventListener('click', function () {
+      if (cardsData.length === 0) {
+        alert('No cards to export.');
+        return;
+      }
+
+      const escapeCSV = (value) => {
+        let str = value == null ? '' : String(value);
+        // Stop spreadsheets treating a leading =, +, -, @ as a formula.
+        if (/^[=+\-@\t\r]/.test(str)) {
+          str = "'" + str;
+        }
+        return '"' + str.replace(/"/g, '""') + '"';
+      };
+
+      const rows = [['Title', 'Author', 'Why we like it', 'Picker'].join(',')];
+      cardsData.forEach(card => {
+        rows.push([
+          escapeCSV(card.title),
+          escapeCSV(card.author),
+          escapeCSV(card.why),
+          escapeCSV(card.picker)
+        ].join(','));
+      });
+
+      // Excel needs a BOM to read the file as UTF-8. CRLF keeps embedded newlines intact.
+      const csvContent = '﻿' + rows.join('\r\n') + '\r\n';
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'shelf_talkers.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    });
+
+    titleInput.addEventListener('input', function () {
+      if (titleInput.value.trim()) {
+        clearInvalid();
+      }
+    });
+
+    // Initial render
+    renderCards();
+  </script>
+</body>
 </html>
